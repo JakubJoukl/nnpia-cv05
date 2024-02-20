@@ -11,7 +11,7 @@ import com.example.NNPIA_cv_2.entity.Kitten;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/kittens")
+@RequestMapping("/kittens")
 public class MyController {
 
     @Autowired

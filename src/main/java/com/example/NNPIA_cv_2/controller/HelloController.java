@@ -5,8 +5,13 @@ import org.springframework.web.bind.annotation.*;
 
 //Rozdíl mezi anotacemi je, že anotace @RestController slouží k označení kontrolerů, které vrací odpovědi ve formátu JSON, SOAP, XML, slouží ke komunikaci s jinou službou nebo stránkou
 //Anotace @Controller slouží ke zpracování a vracení HTTP požadavků pro zobrazení HTML stránek například pro návštěvníka stránky
+/*
+* syntaxe XML, JSON a se liší strukturou
+* XML - připomíná formát HTML dokumentů, atributy (případně vnořené třídy) jsou jako tagy, ve kterých je hodnota, značkovací jazyk, velký overhead
+* JSON - menší overhead než XML, atributy jsou jako key: value v mapě
+* YAML - nejmenší overhead - atributy jsou jako key: value, data formátována pomocí odsazení
+* */
 @RestController
-@RequestMapping("/api/v1")
 public class HelloController {
     @GetMapping("")
     public String helloWorld() {
