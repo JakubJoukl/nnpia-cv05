@@ -1,6 +1,11 @@
 package com.example.NNPIA_cv_2.controller;
 
+import com.example.NNPIA_cv_2.entity.AppUser;
+import com.example.NNPIA_cv_2.repository.AppUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 //Rozdíl mezi anotacemi je, že anotace @RestController slouží k označení kontrolerů, které vrací odpovědi ve formátu JSON, SOAP, XML, slouží ke komunikaci s jinou službou nebo stránkou
@@ -13,6 +18,10 @@ import org.springframework.web.bind.annotation.*;
 * */
 @RestController
 public class HelloController {
+
+    @Autowired
+    private AppUserRepository appUserRepository;
+
     @GetMapping("")
     public String helloWorld() {
         return "Hello world from Spring Boot application.";
@@ -31,5 +40,25 @@ public class HelloController {
     @RequestMapping(value = "/pawns")
     public String pawns(@RequestParam String name) {
         return "Hello Pawns owner " + name;
+    }
+
+    @GetMapping(value = "/appUsers")
+    public List<AppUser> appUsers(@RequestParam boolean active){
+        return appUserRepository.findByActive(active);
+    }
+
+    @PostMapping(value = "/insertAppUser")
+    public boolean insertAppUser(@RequestBody AppUser appUser){
+        if(appUserRepository.existsById(appUser.getId())){
+            return false;
+        } else {
+            appUserRepository.save(appUser);
+            return true;
+        }
+    }
+
+    @GetMapping(value = "/getUsersByRole")
+    public List<AppUser> getUsersByRole(@RequestParam int roleId){
+        return appUserRepository.findUsersByRole(roleId);
     }
 }
