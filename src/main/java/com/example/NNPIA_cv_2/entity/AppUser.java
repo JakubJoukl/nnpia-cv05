@@ -1,7 +1,13 @@
 package com.example.NNPIA_cv_2.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -25,6 +31,9 @@ public class AppUser {
     private int id;
 
     @Column(length = 255)
+    @NotNull
+    @NotBlank
+    @Max(255)
     private String username;
 
     @Column(length = 255)
