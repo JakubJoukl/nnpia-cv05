@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = HelloController.class)
 @Import(HelloController.class)
 //@SpringBootTest(classes = TestSecurityConfig.class)
+@WithMockUser(username = "user", password = "password")
 class HelloControllerTest {
     @Autowired
     MockMvc mockMvc;
