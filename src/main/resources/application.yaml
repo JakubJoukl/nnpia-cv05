@@ -10,7 +10,7 @@ spring:
     password: nnpia
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
   security:
     user:
       name: user

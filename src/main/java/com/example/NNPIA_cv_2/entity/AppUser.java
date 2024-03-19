@@ -31,9 +31,9 @@ public class AppUser {
     private int id;
 
     @Column(length = 255)
-    @NotNull
-    @NotBlank
-    @Max(255)
+    //@NotNull
+    //@NotBlank
+    //@Max(255)
     private String username;
 
     @Column(length = 255)
