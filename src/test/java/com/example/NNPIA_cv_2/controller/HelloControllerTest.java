@@ -20,13 +20,17 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -54,7 +58,30 @@ class HelloControllerTest {
     }
 
     @Test
-    void insertAppUser() {
+    void insertAppUser() throws Exception {
+        AppUser newUser = new AppUser();
+        newUser.setId(500);
+        newUser.setUsername("Insertovany");
+        newUser.setPassword("Heslo");
+        newUser.setActive(true);
+        newUser.setCreationDate(Date.valueOf("2024-03-20"));
+
+        given(mockAppUserRepository.existsById(500)).willReturn(false);
+        given(mockAppUserRepository.save(newUser)).willReturn(newUser);
+
+        mockMvc.perform(post("/insertAppUser")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(newUser))
+                .with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -76,7 +103,7 @@ class HelloControllerTest {
 
         given(mockAppUserRepository.findById(userId)).willReturn(Optional.of(mockUser));
 
-        mockMvc.perform(get("/app-user?userId=" + userId).with(jwt().authorities(new SimpleGrantedAuthority("booking:WRITE"))))
+        mockMvc.perform(get("/app-user?userId=" + userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(mockUser.getId())))
